@@ -6,9 +6,7 @@ import sys
 import os
 import argparse
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-showsz = 800
-mousex, mousey = 0.5, 0.5
-zoom = 1.0
+showsz = 800 mousex, mousey = 0.5, 0.5 zoom = 1.0
 changed = True
 
 
@@ -185,11 +183,30 @@ if __name__ == '__main__':
                         help='data dir [default: ./data]')
     parser.add_argument('--background_black',
                         action='store_true', help='background_color_black')
+    parser.add_argument('--path2', default='./data',
+                        help='data dir [default: ./data]')
     args = parser.parse_args()
 
     np.random.seed(100)
     # c_background = (255, 255, 255)
-    point_set = np.loadtxt(args.path, delimiter=',').astype(np.float32)
+    #point_set = np.loadtxt(args.path, delimiter=' ').astype(np.float32)
+    point_set = np.loadtxt(args.path, delimiter=' ').astype(np.float32)
+    point_set2 = np.loadtxt(args.path2, delimiter=' ').astype(np.float32)
     # import pdb; pdb.set_trace()
 
-    showpoints(point_set[:, :3])
+    c_gt = np.array([0, 0, 1], dtype=float).reshape(1,3)
+    c_gt = np.tile(c_gt, (point_set.shape[0], 1))
+    c_gt2 = np.array([1, 0, 0], dtype=float).reshape(1,3)
+    c_gt2 = np.tile(c_gt2, (point_set2.shape[0], 1))
+
+    print(point_set.shape[0])
+    print(point_set2.shape[0])
+
+    print(c_gt.shape)
+    print(c_gt2.shape)
+
+    pc = np.concatenate((point_set, point_set2))
+    cg = np.concatenate((c_gt, c_gt2))
+
+    showpoints(pc[:, :3], c_gt = cg)
+
