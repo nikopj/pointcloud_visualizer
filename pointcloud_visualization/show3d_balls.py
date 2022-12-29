@@ -5,8 +5,11 @@ import cv2
 import sys
 import os
 import argparse
+import utils
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-showsz = 800 mousex, mousey = 0.5, 0.5 zoom = 1.0
+showsz = 800 
+mousex, mousey = 0.5, 0.5 
+zoom = 1.0
 changed = True
 
 
@@ -207,6 +210,9 @@ if __name__ == '__main__':
 
     pc = np.concatenate((point_set, point_set2))
     cg = np.concatenate((c_gt, c_gt2))
+
+    pc, inds = utils.pcclip(pc, 0.5, ord=np.inf, normalize=True)
+    cg = cg[inds, :]
 
     showpoints(pc[:, :3], c_gt = cg)
 
