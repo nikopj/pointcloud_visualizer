@@ -188,6 +188,8 @@ if __name__ == '__main__':
                         action='store_true', help='background_color_black')
     parser.add_argument('--path2', default='./data',
                         help='data dir [default: ./data]')
+    parser.add_argument('--transform1',
+                         default = '',help='none or random')
     args = parser.parse_args()
 
     np.random.seed(100)
@@ -196,6 +198,11 @@ if __name__ == '__main__':
     point_set = np.loadtxt(args.path, delimiter=' ').astype(np.float32)
     point_set2 = np.loadtxt(args.path2, delimiter=' ').astype(np.float32)
     # import pdb; pdb.set_trace()
+
+    if args.transform1 == 'random':
+        t1 = np.random.uniform(low=-20,high=20,size=[3])
+        a1 = np.random.uniform(low=-180,high=180,size=[3])
+        point_set = utils.transRot(point_set,a1,t1,asform="angles")
 
     c_gt = np.array([0, 0, 1], dtype=float).reshape(1,3)
     c_gt = np.tile(c_gt, (point_set.shape[0], 1))
